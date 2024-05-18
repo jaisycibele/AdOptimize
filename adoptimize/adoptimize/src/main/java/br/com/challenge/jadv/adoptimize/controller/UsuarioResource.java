@@ -72,7 +72,7 @@ public class UsuarioResource implements ResourceDTO<UsuarioRequest, UsuarioRespo
 	    
 
 
-	    @GetMapping(value = "/{id}")
+	    @GetMapping(value = "/{idUsuario}")
 	    @Override
 	    public ResponseEntity<UsuarioResponse> findById(@PathVariable Long idUsuario) {
 	        var entity = service.findById( idUsuario );
@@ -96,23 +96,24 @@ public class UsuarioResource implements ResourceDTO<UsuarioRequest, UsuarioRespo
 
 	    }
 	    
-	    @PutMapping("/{id}")
-	    public ResponseEntity<UsuarioResponse> update(@PathVariable Long id, @RequestBody @Valid UsuarioRequest request) {
-	        Usuario entity = service.findById(id);
+	    @PutMapping("/{idUsuario}")
+	    @Transactional
+	    public ResponseEntity<UsuarioResponse> update(@PathVariable Long idUsuario, @RequestBody @Valid UsuarioRequest request) {
+	        Usuario entity = service.findById(idUsuario);
 	        if (entity == null) {
 	            return ResponseEntity.notFound().build();
 	        }
-	        Usuario updatedEntity = service.update(id, service.toEntity(request));
+	        Usuario updatedEntity = service.update(idUsuario, service.toEntity(request));
 	        return ResponseEntity.ok(service.toResponse(updatedEntity));
 	    }
 
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> delete(@PathVariable Long id) {
-	        Usuario entity = service.findById(id);
+	    @DeleteMapping("/{idUsuario}")
+	    public ResponseEntity<Void> delete(@PathVariable Long idUsuario) {
+	        Usuario entity = service.findById(idUsuario);
 	        if (entity == null) {
 	            return ResponseEntity.notFound().build();
 	        }
-	        service.delete(id);
+	        service.delete(idUsuario);
 	        return ResponseEntity.noContent().build();
 	    }
 }

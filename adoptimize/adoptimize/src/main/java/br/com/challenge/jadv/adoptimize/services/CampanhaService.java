@@ -1,11 +1,13 @@
 package br.com.challenge.jadv.adoptimize.services;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import br.com.challenge.jadv.adoptimize.entity.Anuncio;
 import br.com.challenge.jadv.adoptimize.entity.Campanha;
 import br.com.challenge.jadv.adoptimize.repositorios.CampanhaRepository;
 import br.com.challenge.jadv.adoptimize.servicos.dto.CampanhaRequest;
@@ -75,6 +77,26 @@ public class CampanhaService implements ServiceDTO<Campanha, CampanhaRequest, Ca
 	                .idCampanha(e.getIdCampanha())
 	                .anuncio(anuncio)
 	                .build();
+	    }
+	    
+	    public Campanha update(Long idCampanha, Campanha campanha) {
+	        Optional<Campanha> campanhaOptional = repo.findById(idCampanha);
+	        if (campanhaOptional.isPresent()) {
+	            Campanha campanhaUpdate = campanhaOptional.get();
+	            campanhaUpdate.setNomeCampanha(campanha.getNomeCampanha());
+	            campanhaUpdate.setOrcamento(campanha.getOrcamento());
+	            campanhaUpdate.setDataInicio(campanha.getDataInicio());
+	            campanhaUpdate.setDataTermino(campanha.getDataTermino());
+	            campanhaUpdate.setStatus(campanha.getStatus());
+	            campanhaUpdate.setTipoCampanha(campanha.getTipoCampanha());
+	            campanha = repo.save(campanhaUpdate);
+	            return campanha;
+	        }
+	        return null;
+	    }
+	    
+	    public void delete(Long idCampanha) {
+	        repo.deleteById(idCampanha);
 	    }
 
 }

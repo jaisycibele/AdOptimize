@@ -8,9 +8,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,8 @@ import br.com.challenge.jadv.adoptimize.entity.Anuncio;
 import br.com.challenge.jadv.adoptimize.entity.Campanha;
 import br.com.challenge.jadv.adoptimize.services.AnuncioService;
 import br.com.challenge.jadv.adoptimize.services.CampanhaService;
+import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioRequest;
+import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioResponse;
 import br.com.challenge.jadv.adoptimize.servicos.dto.CampanhaRequest;
 import br.com.challenge.jadv.adoptimize.servicos.dto.CampanhaResponse;
 import jakarta.validation.Valid;
@@ -111,5 +115,26 @@ public class CampanhaResource implements ResourceDTO<CampanhaRequest, CampanhaRe
                 .toUri();
 
         return ResponseEntity.created( uri ).body( response );
+    }
+    
+    @PutMapping("/{idCampanha}")
+    @Transactional
+    public ResponseEntity<CampanhaResponse> update(@PathVariable Long idCampanha, @RequestBody @Valid CampanhaRequest request) {
+        Campanha entity = service.findById(idCampanha);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Campanha updatedEntity = service.update(idCampanha, service.toEntity(request));
+        return ResponseEntity.ok(service.toResponse(updatedEntity));
+    }
+    
+    @DeleteMapping("/{idCampanha}")
+    public ResponseEntity<Void> delete(@PathVariable Long idCampanha) {
+        Campanha entity = service.findById(idCampanha);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        service.delete(idCampanha);
+        return ResponseEntity.noContent().build();
     }
 }

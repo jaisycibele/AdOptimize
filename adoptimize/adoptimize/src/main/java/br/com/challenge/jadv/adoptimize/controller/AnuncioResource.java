@@ -8,9 +8,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,8 @@ import br.com.challenge.jadv.adoptimize.services.AnuncioService;
 import br.com.challenge.jadv.adoptimize.services.UsuarioService;
 import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioRequest;
 import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioResponse;
+import br.com.challenge.jadv.adoptimize.servicos.dto.UsuarioRequest;
+import br.com.challenge.jadv.adoptimize.servicos.dto.UsuarioResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -117,5 +121,26 @@ public class AnuncioResource implements ResourceDTO<AnuncioRequest, AnuncioRespo
 	                .toUri();
 
 	        return ResponseEntity.created( uri ).body( response );
+	    }
+	    
+	    @PutMapping("/{idAnuncio}")
+	    @Transactional
+	    public ResponseEntity<AnuncioResponse> update(@PathVariable Long idAnuncio, @RequestBody @Valid AnuncioRequest request) {
+	        Anuncio entity = service.findById(idAnuncio);
+	        if (entity == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        Anuncio updatedEntity = service.update(idAnuncio, service.toEntity(request));
+	        return ResponseEntity.ok(service.toResponse(updatedEntity));
+	    }
+	    
+	    @DeleteMapping("/{idAnuncio}")
+	    public ResponseEntity<Void> delete(@PathVariable Long idAnuncio) {
+	        Anuncio entity = service.findById(idAnuncio);
+	        if (entity == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        service.delete(idAnuncio);
+	        return ResponseEntity.noContent().build();
 	    }
 }

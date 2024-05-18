@@ -1,12 +1,14 @@
 package br.com.challenge.jadv.adoptimize.services;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import br.com.challenge.jadv.adoptimize.entity.Anuncio;
+import br.com.challenge.jadv.adoptimize.entity.Usuario;
 import br.com.challenge.jadv.adoptimize.repositorios.AnuncioRepository;
 import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioRequest;
 import br.com.challenge.jadv.adoptimize.servicos.dto.AnuncioResponse;
@@ -74,5 +76,27 @@ public class AnuncioService implements ServiceDTO<Anuncio, AnuncioRequest, Anunc
                 .idAnuncio(e.getIdAnuncio())
                 .usuario(usuario)
                 .build();
+    }
+    
+    public Anuncio update(Long idAnuncio, Anuncio anuncio) {
+        Optional<Anuncio> anuncioOptional = repo.findById(idAnuncio);
+        if (anuncioOptional.isPresent()) {
+            Anuncio anuncioUpdate = anuncioOptional.get();
+            anuncioUpdate.setTitulo(anuncio.getTitulo());
+            anuncioUpdate.setTextoAnuncio(anuncio.getTextoAnuncio());
+            anuncioUpdate.setUrlAnuncio(anuncio.getUrlAnuncio());
+            anuncioUpdate.setTipoAnuncio(anuncio.getTipoAnuncio());
+            anuncioUpdate.setDataCriacao(anuncio.getDataCriacao());
+            anuncioUpdate.setImpressoes(anuncio.getImpressoes());
+            anuncioUpdate.setQtdCliques(anuncio.getQtdCliques());
+            anuncioUpdate.setCustoAnuncio(anuncio.getCustoAnuncio());
+            anuncio = repo.save(anuncioUpdate);
+            return anuncio;
+        }
+        return null;
+    }
+    
+    public void delete(Long idAnuncio) {
+        repo.deleteById(idAnuncio);
     }
 }
