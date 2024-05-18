@@ -3,6 +3,7 @@ spring:
     url: jdbc:oracle:${DB_HOMOLOG_SERVER:thin:@oracle.fiap.com.br}:${DB_HOMOLOG_PORT:1521}:${DB_HOMOLOG_NAME:ORCL}
     username: ${DB_HOMOLOG_USERNAME:XX}
     password: ${DB_HOMOLOG_PASSWORD:XX}
+    driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:
       ddl-auto: create

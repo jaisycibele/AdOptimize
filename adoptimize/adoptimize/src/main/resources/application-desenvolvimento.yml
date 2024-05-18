@@ -3,6 +3,7 @@ spring:
     url: jdbc:mariadb://${DB_DESENV_SERVER}:${DB_DESENV_PORT:3306}/${DB_DESENV_NAME:challenge}?createDatabaseIfNotExist=true
     username: ${DB_DESENV_USERNAME:XXX}
     password: ${DB_DESENV_PASSWORD:XXX}
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
