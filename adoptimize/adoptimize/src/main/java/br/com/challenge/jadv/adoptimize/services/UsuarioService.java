@@ -54,6 +54,9 @@ public class UsuarioService implements ServiceDTO<Usuario, UsuarioRequest, Usuar
 	        return UsuarioResponse.builder()
 	                .idUsuario(e.getIdUsuario())
 	                .nome(e.getNome())
+	                .email(e.getEmail())
+	                .senha(e.getSenha())
+	                .chaveGoogleAds(e.getChaveGoogleAds())
 	                .build();
 
 	    }
